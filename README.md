@@ -1,1 +1,1 @@
-# ai-studio-pro-
+TRIMAX-AI-STUDIO
