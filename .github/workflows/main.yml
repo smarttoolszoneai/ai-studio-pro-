@@ -1,0 +1,33 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Get Date
+      shell: bash
+      run: |
+        echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      id: get-date
+
+    - name: Buildozer Action
+      uses: ArtemSerebrennkov/buildozer-action@v1
+      id: buildozer
+      with:
+        workdir: .
+        buildozer_version: master
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v2
+      with:
+        name: Panjtan-CS-APK
+        path: ${{ steps.buildozer.outputs.filename }}
