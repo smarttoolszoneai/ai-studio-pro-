@@ -1,11 +1,4 @@
-name: Build Panjtan APK
 
-on:
-  push:
-    branches: [ "main", "master" ]
-  workflow_dispatch:
-
-jobs:
   build:
     runs-on: ubuntu-latest
 
@@ -33,5 +26,4 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4  # ورژن 3 سے 4 کر دیا تاکہ ایرر ختم ہو
         with:
-          name: Panjtan-CS-APK
-          path: bin/*.apk
+          name: Panjtan-
