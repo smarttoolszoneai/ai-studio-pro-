@@ -7,16 +7,29 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # ہم نے ایک مستحکم ورژن منتخب کیا ہے
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build with Buildozer
-        uses: kivy/buildozer-action@master
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          save_buildozer_config: false
+          python-version: '3.10'
+
+      - name: Install Buildozer and Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip install --upgrade pip
+          pip install buildozer cython==0.29.33
+
+      - name: Build APK with Buildozer
+        run: |
+          # یہ لائن خود بخود تمام لائسنس قبول کر لے گی اور بلڈ شروع کرے گی
+          yes | buildozer -v android debug
+        continue-on-error: false
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
