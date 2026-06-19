@@ -1,4 +1,5 @@
-name: Build_Panjtan_APK
+name: Build Panjtan APK
+
 on:
   push:
     branches: [ "main", "master" ]
@@ -7,9 +8,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Build with Buildozer
-        uses: kivy/buildozer-action@master
+      - name: Checkout code
+        uses: actions/checkout@v4  # ورژن 3 سے 4 کر دیا
+
+      - name: Set up Python
+        uses: actions/setup-python@v5  # ورژن 4 سے 5 کر دیا
         with:
-          save_buildozer_config: false
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good
+
+      - name: Build with Buildozer
+        # ہم نے ایک زیادہ مستحکم ایکشن استعمال کیا ہے
+        uses: ArtemSerebrennkov/buildozer-action@v1
+        with:
+          workdir: .
+          buildozer_version: master
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4  # ورژن 3 سے 4 کر دیا تاکہ ایرر ختم ہو
+        with:
+          name: Panjtan-CS-APK
+          path: bin/*.apk
